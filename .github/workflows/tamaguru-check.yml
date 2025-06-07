@@ -1,0 +1,22 @@
+name: Tamaguru Integrity Check
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Check required files
+      run: |
+        echo "🔍 Проверка шагов Tamaguru"
+        test -f README.md || (echo '❌ Нет README.md' && exit 1)
+        test -f CREATION_LOG.md || (echo '❌ Нет CREATION_LOG.md' && exit 1)
+        test -f tamaguru.version || (echo '❌ Нет tamaguru.version' && exit 1)
+        test -f update.log || (echo '❌ Нет update.log' && exit 1)
+        test -f src/main.rs || (echo '❌ Нет src/main.rs' && exit 1)
+        echo '✅ Все ключевые файлы на месте.'
