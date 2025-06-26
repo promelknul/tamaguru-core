@@ -1,0 +1,14 @@
+name: Backlog-Synth dry-run
+
+on:
+  push:
+    tags:
+      - street-probe-*
+
+jobs:
+  synth:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Hello from Street-Agent
+        run: echo "🟢 Backlog-Synth triggered OK"
