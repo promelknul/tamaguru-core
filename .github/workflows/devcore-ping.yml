@@ -1,0 +1,9 @@
+name: DevCore ping
+on:                                              # ─┐  ручной запуск
+  workflow_dispatch: {}                          # ─┘
+jobs:
+  ping:
+    runs-on: self-hosted
+    labels: desktop-wavy
+    steps:
+      - run: echo "🟢 DevCore runner online: $(date)"
