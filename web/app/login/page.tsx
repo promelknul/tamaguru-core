@@ -4,7 +4,7 @@ import axios from 'axios'
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const submit = async e => {
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try { await axios.post(`${process.env.NEXT_PUBLIC_VAULT_API_URL}/auth/login`, { email, password }) } catch (e) { console.error(e) }
   }
