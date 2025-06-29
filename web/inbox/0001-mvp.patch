@@ -1,0 +1,187 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Aurora <aurora@mw.local>
+Date: 2025-06-19 23:30:00 +0300
+Subject: MVP pipeline: Autotrans + Dostavista integration
+
+Add autotrans.py (orders packaging), dostavista.py (courier draft),
+wa_hook.sh (WhatsApp helper) and CI workflow mvp_pipeline.yml.
+
+---
+ bridge/autotrans.py                       | 41 +++++++++++++++++++++++++++++++
+ bridge/dostavista.py                      | 48 ++++++++++++++++++++++++++++++++++
+ bridge/wa_hook.sh                         | 13 ++++++++++
+ .github/workflows/mvp_pipeline.yml        | 20 +++++++++++++++
+ 4 files changed, 122 insertions(+)
+ create mode 100755 bridge/autotrans.py
+ create mode 100755 bridge/dostavista.py
+ create mode 100755 bridge/wa_hook.sh
+ create mode 100644 .github/workflows/mvp_pipeline.yml
+
+diff --git a/bridge/autotrans.py b/bridge/autotrans.py
+new file mode 100755
+index 0000000..1111111
+--- /dev/null
++++ b/bridge/autotrans.py
+@@
++#!/usr/bin/env python3
++# -*- coding: utf-8 -*-
++\"\"\"Autotrans: create packaging order for Ozon posting.
++
++Reads posting JSON from STDIN and prints `order_id` to STDOUT.
++
++Env:
++  AUTOTRANS_API_KEY   – API key issued by autotrans.ru
++\"\"\"
++import os, sys, json, yaml, requests
++
++API_KEY = os.environ.get("AUTOTRANS_API_KEY")
++API_URL = "https://api.autotrans.ru/v1/order"
++
++
++def main() -> None:
++    posting = json.load(sys.stdin)
++    sku = posting["products"][0]["sku"]  # simplified: first SKU defines box
++
++    with open("/opt/bridge/pack-map.yaml", "r") as fh:
++        mapping = yaml.safe_load(fh)
++
++    pack = mapping.get(sku)
++    if not pack:
++        sys.exit(f"No mapping for SKU {sku} in pack-map.yaml")
++
++    body = {
++        "sku": pack["autotrans_sku"],
++        "qty": sum(item["quantity"] for item in posting["products"]),
++        "comment": posting["posting_number"],
++    }
++
++    resp = requests.post(
++        API_URL, headers={"X-API-KEY": API_KEY}, json=body, timeout=30
++    )
++    resp.raise_for_status()
++    print(resp.json().get("order_id"))
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/bridge/dostavista.py b/bridge/dostavista.py
+new file mode 100755
+index 0000000..2222222
+--- /dev/null
++++ b/bridge/dostavista.py
+@@
++#!/usr/bin/env python3
++# -*- coding: utf-8 -*-
++\"\"\"Dostavista integration (draft).
++
++Reads order JSON from STDIN and creates a courier delivery.
++A simple round-robin chooses an account (≤10 orders/day).
++Prints `delivery_id` to STDOUT.
++\"\"\"
++import datetime as _dt
++import json, os, pathlib, sys, yaml, requests
++
++ACCOUNTS_FILE = pathlib.Path("/opt/bridge/dostavista_accounts.yaml")
++API_URL = "https://robot.dostavista.ru/api/business/1.3/create-order"
++
++
++def _pick_account():
++    data = yaml.safe_load(ACCOUNTS_FILE.read_text())
++    today = _dt.date.today().isoformat()
++    for acc in data:
++        if acc.get("date") != today:
++            acc["date"], acc["count"] = today, 0
++        if acc["count"] < 10:
++            acc["count"] += 1
++            ACCOUNTS_FILE.write_text(yaml.safe_dump(data))
++            return acc
++    raise RuntimeError("All Dostavista accounts exhausted for today")
++
++
++def main() -> None:
++    order = json.load(sys.stdin)
++    acc = _pick_account()
++
++    body = {
++        "type": "delivery",
++        "matter": f"Boxes {order['posting_number']}",
++        "total_weight_kg": order["weight"],
++        "points": [
++            {"address": order["address_from"]},
++            {"address": order["address_to"]},
++        ],
++        "promo_code": "DOS",
++    }
++
++    resp = requests.post(
++        API_URL, headers={"Authorization": f\"Bearer {acc['token']}\"}, json=body, timeout=30
++    )
++    resp.raise_for_status()
++    print(resp.json()["order"]["id"])
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/bridge/wa_hook.sh b/bridge/wa_hook.sh
+new file mode 100755
+index 0000000..3333333
+--- /dev/null
++++ b/bridge/wa_hook.sh
+@@
++#!/usr/bin/env bash
++# Quick WhatsApp helper: generates customer message and stores to /tmp.
++set -e
++
++POSTING_ID=\"$1\"
++CASH=\"$2\"
++PHONE=\"$3\"
++
++cat <<EOF >/tmp/wa_msg.txt
++Здравствуйте! Курьер доставил заказ ${POSTING_ID}.
++К оплате при получении: ${CASH} ₽
++Если возникнут вопросы, напишите сюда. Спасибо!
++EOF
++
++echo \"WhatsApp message prepared at /tmp/wa_msg.txt\"
+diff --git a/.github/workflows/mvp_pipeline.yml b/.github/workflows/mvp_pipeline.yml
+new file mode 100644
+index 0000000..4444444
+--- /dev/null
++++ b/.github/workflows/mvp_pipeline.yml
+@@
++name: MVP-pipeline
++
++on:
++  push:
++    paths:
++      - 'bridge/**'
++      - '.github/workflows/mvp_pipeline.yml'
++  workflow_dispatch:
++
++jobs:
++  mvp:
++    if: env.AUTOPILOT_ENABLED == 'true'
++    runs-on: self-hosted
++    steps:
++      - uses: actions/checkout@v4
++
++      - name: Lint
++        run: |
++          pip install black==24.4.0
++          black --check bridge
++
++      - name: Sync Letopis
++        run: |
++          tar -czf letopis_$(date +%Y%m%d_%H%M).tgz /opt/letopis || true
++
++      - name: Upload Letopis as artifact
++        uses: actions/upload-artifact@v4
++        with:
++          name: letopis
++          path: letopis_*.tgz
++
++      - name: Success ping
++        run: echo "✅ MVP pipeline finished"
++
+--
+2.43.0
