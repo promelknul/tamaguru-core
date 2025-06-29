@@ -7,6 +7,12 @@ import (
 	"github.com/promelknul/tamaguru-core/core/vault/auth"
 )
 
+func cors(w http.ResponseWriter) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+}
+
 type loginReq struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
@@ -16,19 +22,23 @@ type authResp struct {
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
+	cors(w)
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
 	if r.Method != http.MethodPost {
-		w.WriteHeader(http.StatusMethodNotAllowed)
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 	var req loginReq
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		http.Error(w, "bad json", http.StatusBadRequest)
 		return
 	}
-	// TODO: real user store; accept any credentials for MVP
 	token, err := auth.Generate(req.Email)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		http.Error(w, "token error", http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
