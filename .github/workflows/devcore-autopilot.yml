@@ -1,0 +1,10 @@
+name: DevCore ping
+
+on: [workflow_dispatch]
+
+jobs:
+  ping:
+    runs-on: self-hosted
+    labels: desktop-wavy
+    steps:
+      - run: echo "DevCore runner online: $(date)"
