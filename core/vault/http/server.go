@@ -19,6 +19,7 @@ type loginReq struct {
 }
 type authResp struct {
 	Token string `json:"token"`
+	Refresh string `json:"refresh_token"`
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -42,5 +43,5 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(authResp{Token: token})
+	refresh:=auth.GenRefresh();auth.SaveRefresh(req.Email,refresh);json.NewEncoder(w).Encode(authResp{Token:token,Refresh:refresh})
 }
