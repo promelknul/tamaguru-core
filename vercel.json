@@ -1,0 +1,4 @@
+{
+ "framework":"vite",
+ "rewrites":[{"source":"/api/(.*)","destination":"https://api.wavy2wave.online/$1"}]
+}
