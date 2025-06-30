@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
+    "dev": "turbo dev --filter=web",
+    "build": "turbo run build --filter=web",
     "start": "next start",
     "lint": "next lint"
   },
@@ -27,6 +27,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
     "tailwindcss": "^4.1.11",
+    "turbo": "^2.5.4",
     "typescript": "^5"
   }
 }
