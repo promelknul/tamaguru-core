@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { AuthService } from '../../src/api/index'
+import { AuthService } from '../../src/api/services/AuthService'
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
