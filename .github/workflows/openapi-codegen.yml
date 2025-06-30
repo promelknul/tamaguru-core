@@ -5,6 +5,10 @@ on:
 jobs:
   gen:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        job: [build-go,build-web,codegen]
+    container: node:20-bookworm
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
