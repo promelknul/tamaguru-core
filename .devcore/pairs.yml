@@ -1,0 +1,7 @@
+jobs:
+  backend_pair:
+    run: ./scripts/run_backend.sh
+    labels: [backend, vault]
+  frontend_pair:
+    run: ./scripts/run_front.sh
+    labels: [frontend, ui]
