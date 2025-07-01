@@ -1,0 +1,8 @@
+name: vsx_ingest
+on: [push]
+jobs:
+  parse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python agents/frontend/__tools/vsx_ingest.py
