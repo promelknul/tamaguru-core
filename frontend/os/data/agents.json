@@ -1,0 +1,100 @@
+[
+  {
+    "id": "ZEVS",
+    "name": "ZEVS",
+    "role": "Бог экспресс-доставки (Яндекс, Озон)",
+    "status": "active",
+    "type": "supreme",
+    "subagents": [
+      "Yandex Express",
+      "Ozon Express"
+    ]
+  },
+  {
+    "id": "DBS",
+    "name": "DBS",
+    "role": "Бог стандартных заказов",
+    "status": "active",
+    "type": "supreme",
+    "subagents": [
+      "RetailAgent",
+      "StandardFlow"
+    ]
+  },
+  {
+    "id": "Finder",
+    "name": "Finder",
+    "role": "Бог поиска товара (по артикулу, фото)",
+    "status": "active",
+    "type": "supreme",
+    "subagents": [
+      "BarcodeReader",
+      "PhotoMatcher"
+    ]
+  },
+  {
+    "id": "Navix",
+    "name": "Navix",
+    "role": "Оформление заказов",
+    "status": "active",
+    "type": "supreme",
+    "subagents": [
+      "AddressValidator",
+      "PaymentLinker"
+    ]
+  },
+  {
+    "id": "REZ",
+    "name": "RΞZ",
+    "role": "Бог ошибок: анализ, коррекция, reroute",
+    "status": "active",
+    "type": "supreme",
+    "subagents": [
+      "FailureDetector",
+      "CorrectionBot"
+    ]
+  },
+  {
+    "id": "VP",
+    "name": "Вице-президент",
+    "role": "Персональный наблюдатель пользователя",
+    "status": "active",
+    "type": "supreme",
+    "subagents": [
+      "AgendaSync",
+      "EmotionReflector"
+    ]
+  },
+  {
+    "id": "KROT",
+    "name": "КРОТ",
+    "role": "Анализ наполнения кабинетов",
+    "status": "active",
+    "type": "supreme",
+    "subagents": [
+      "CabinetScanner"
+    ]
+  },
+  {
+    "id": "STRATEG",
+    "name": "STRATEG",
+    "role": "Бог стратегий, сезонного наполнения",
+    "status": "active",
+    "type": "supreme",
+    "subagents": [
+      "TrendsTracker",
+      "DemandForecaster"
+    ]
+  },
+  {
+    "id": "LOAD",
+    "name": "LOAD",
+    "role": "Загрузка товаров на маркетплейсы",
+    "status": "active",
+    "type": "supreme",
+    "subagents": [
+      "XMLFeedBuilder",
+      "APIUploader"
+    ]
+  }
+]
