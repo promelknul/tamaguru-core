@@ -1,0 +1,24 @@
+name: Apply patch from inbox
+
+on:
+  push:
+    paths: [ 'inbox/*.patch' ]
+
+jobs:
+  apply:
+    runs-on: self-hosted    # ваш VPS-runner
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Apply patch and clean
+        run: |
+          set -e
+          for p in inbox/*.patch; do
+            git am "$p" && rm "$p"
+          done
+
+      - name: Push back
+        run: |
+          git config --global user.name  "Aurora"
+          git config --global user.email "aurora@mw.local"
+          git push
