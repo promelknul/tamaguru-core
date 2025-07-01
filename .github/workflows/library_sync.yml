@@ -1,0 +1,13 @@
+name: library_sync
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/fetch_graph.sh
+      - run: git add web/public/graph.json && git commit -m "chore(library): nightly graph sync" || true
+      - run: git push || true
