@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 export const runtime = 'edge';
-export async function GET(_: NextRequest) {
+export async () {
   const ozonRes = await fetch('http://95.163.222.133:9000/orders/stream', {
     headers: { Accept: 'text/event-stream' }
   });
