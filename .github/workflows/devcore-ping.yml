@@ -1,0 +1,1 @@
+name: devcore-ping\non:\n  workflow_dispatch:\njobs:\n  ping:\n    runs-on: self-hosted\n    steps:\n      - name: Echo 4\n        run: echo "4"

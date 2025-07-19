@@ -1,0 +1,27 @@
+name: DevCore Push Queue AutoSync
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - dev
+    paths:
+      - 'push_queue/**'
+
+jobs:
+  sync-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Move files from push_queue and commit
+        run: |
+          mkdir -p sync_temp
+          cp -r push_queue/* sync_temp/ || echo "No files"
+          cp -r sync_temp/* .
+          git config --global user.name "DevCore"
+          git config --global user.email "devcore@tamaguru.ai"
+          git add .
+          git commit -m "auto: sync push_queue via DevCore"
+          git push origin dev

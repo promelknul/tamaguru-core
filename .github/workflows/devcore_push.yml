@@ -1,0 +1,27 @@
+name: DevCore Push Queue Sync
+
+on:
+  push:
+    paths:
+      - 'push_queue/**'
+    branches:
+      - dev
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Commit all changes from push_queue
+      run: |
+        git config --global user.name "DevCore"
+        git config --global user.email "devcore@tamaguru.ai"
+        cp -r push_queue/* .
+        git add .
+        git commit -m "devcore: auto-sync from push_queue"
+        git push origin dev
+      env:
+        GIT_AUTHOR_NAME: DevCore
+        GIT_AUTHOR_EMAIL: devcore@tamaguru.ai
