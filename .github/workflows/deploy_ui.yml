@@ -14,3 +14,11 @@ jobs:
         run: cd web && npm ci --legacy-peer-deps && npm run build
       - name: OK
         run: echo "build done"
+      - name: Sync to VPS
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: "root@95.163.222.133"
+        run: |
+          echo "$SSH_KEY" > id_rsa && chmod 600 id_rsa
+          rsync -e "ssh -i id_rsa -o StrictHostKeyChecking=no" -az --delete web/.next web/public $SSH_HOST:/var/www/app
+          ssh -i id_rsa -o StrictHostKeyChecking=no $SSH_HOST "systemctl reload nginx"
