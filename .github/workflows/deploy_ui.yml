@@ -10,6 +10,8 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
+          cache-dependency-path: 'web/package-lock.json'
+          cache-dependency-path: 'web/package-lock.json'
       - name: Build web UI
         run: cd web && npm ci --legacy-peer-deps && npm run build
       - name: OK
