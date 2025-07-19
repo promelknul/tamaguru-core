@@ -1,0 +1,17 @@
+name: openapi-codegen
+on:
+  push:
+    paths: [ 'web/auth/spec/openapi.yaml' ]
+jobs:
+  gen:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        job: [build-go,build-web,codegen]
+    container: node:20-bookworm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '20'}
+      - run: npm install -g @openapitools/openapi-generator-cli turbo
+      - run: make gen

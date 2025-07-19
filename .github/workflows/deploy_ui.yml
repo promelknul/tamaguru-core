@@ -1,0 +1,9 @@
+name: deploy_ui
+on:
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Echo deploy
+        run: echo "deploy triggered"
