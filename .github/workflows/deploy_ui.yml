@@ -11,10 +11,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
+          cache: 'pnpm'
           cache-dependency-path: 'web/package-lock.json'
       - name: Build web UI
-        run: cd web && npm ci --legacy-peer-deps && npm run build
+        run: cd web && pnpm install --frozen-lockfile && pnpm --filter web build
       - name: OK
         run: echo "build done"
       - name: Sync to VPS
