@@ -3,7 +3,9 @@ on:
   workflow_dispatch:
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on:
+      - self-hosted
+      - Linux
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
