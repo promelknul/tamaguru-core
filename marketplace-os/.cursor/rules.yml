@@ -1,0 +1,4 @@
+model_endpoint: https://api.groq.com/openai/v1
+model_id: meta-llama/llama-4-scout-17b-16e-instruct
+voice_queue: redis://localhost:6379/0#voice:cmds
+deploy_cmd: ssh root@95.163.222.133 'systemctl restart ozon-bridge'
