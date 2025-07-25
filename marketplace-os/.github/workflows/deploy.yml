@@ -1,0 +1,10 @@
+name: deploy
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  ship:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - run: ssh root@95.163.222.133 'git -C /srv/marketplace-os pull && systemctl restart ozon-bridge'
