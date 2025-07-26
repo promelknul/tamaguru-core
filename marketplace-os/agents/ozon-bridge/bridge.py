@@ -11,16 +11,16 @@ def fetch():
     from datetime import datetime, timedelta
 since = (datetime.utcnow() - timedelta(days=1)).isoformat() + "Z"
 to    =  datetime.utcnow().isoformat() + "Z"
+from datetime import datetime, timedelta
+since = (datetime.utcnow() - timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
+to    =  datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
 body = {
     "dir": "ASC",
     "limit": 50,
     "offset": 0,
     "with": {"analytics_data": True, "barcodes": True},
-    "filter": {
-        "since": since,
-        "to": to,
-        "status": "awaiting_packaging"
-    }
+    "filter": {"since": since, "to": to, "status": "awaiting_packaging"}
+}
 }
 }
 }
@@ -33,16 +33,16 @@ def fetch():
     from datetime import datetime, timedelta
 since = (datetime.utcnow() - timedelta(days=1)).isoformat() + "Z"
 to    =  datetime.utcnow().isoformat() + "Z"
+from datetime import datetime, timedelta
+since = (datetime.utcnow() - timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
+to    =  datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
 body = {
     "dir": "ASC",
     "limit": 50,
     "offset": 0,
     "with": {"analytics_data": True, "barcodes": True},
-    "filter": {
-        "since": since,
-        "to": to,
-        "status": "awaiting_packaging"
-    }
+    "filter": {"since": since, "to": to, "status": "awaiting_packaging"}
+}
 }
 }
         },
@@ -75,16 +75,16 @@ def fetch():
     from datetime import datetime, timedelta
 since = (datetime.utcnow() - timedelta(days=1)).isoformat() + "Z"
 to    =  datetime.utcnow().isoformat() + "Z"
+from datetime import datetime, timedelta
+since = (datetime.utcnow() - timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
+to    =  datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
 body = {
     "dir": "ASC",
     "limit": 50,
     "offset": 0,
     "with": {"analytics_data": True, "barcodes": True},
-    "filter": {
-        "since": since,
-        "to": to,
-        "status": "awaiting_packaging"
-    }
+    "filter": {"since": since, "to": to, "status": "awaiting_packaging"}
+}
 }
 }
         },
