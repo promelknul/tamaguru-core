@@ -8,16 +8,20 @@ HEAD = {
     "Content-Type": "application/json"
 }
 def fetch():
-    body = {
+    from datetime import datetime, timedelta
+since = (datetime.utcnow() - timedelta(days=1)).isoformat() + "Z"
+to    =  datetime.utcnow().isoformat() + "Z"
+body = {
     "dir": "ASC",
     "limit": 50,
     "offset": 0,
     "with": {"analytics_data": True, "barcodes": True},
     "filter": {
-        "since": (dt.datetime.utcnow()-dt.timedelta(days=1)).isoformat()+"Z",
-        "to": dt.datetime.utcnow().isoformat()+"Z",
+        "since": since,
+        "to": to,
         "status": "awaiting_packaging"
     }
+}
 }
 }
     r = requests.post("https://api-seller.ozon.ru/v3/posting/fbs/list",
@@ -26,16 +30,20 @@ def fetch():
     return r.json()["result"]["postings"]
 
 def fetch():
-    body = {
+    from datetime import datetime, timedelta
+since = (datetime.utcnow() - timedelta(days=1)).isoformat() + "Z"
+to    =  datetime.utcnow().isoformat() + "Z"
+body = {
     "dir": "ASC",
     "limit": 50,
     "offset": 0,
     "with": {"analytics_data": True, "barcodes": True},
     "filter": {
-        "since": (dt.datetime.utcnow()-dt.timedelta(days=1)).isoformat()+"Z",
-        "to": dt.datetime.utcnow().isoformat()+"Z",
+        "since": since,
+        "to": to,
         "status": "awaiting_packaging"
     }
+}
 }
         },
         "limit": 5,
@@ -64,16 +72,20 @@ HEAD = {
 }
 
 def fetch():
-    body = {
+    from datetime import datetime, timedelta
+since = (datetime.utcnow() - timedelta(days=1)).isoformat() + "Z"
+to    =  datetime.utcnow().isoformat() + "Z"
+body = {
     "dir": "ASC",
     "limit": 50,
     "offset": 0,
     "with": {"analytics_data": True, "barcodes": True},
     "filter": {
-        "since": (dt.datetime.utcnow()-dt.timedelta(days=1)).isoformat()+"Z",
-        "to": dt.datetime.utcnow().isoformat()+"Z",
+        "since": since,
+        "to": to,
         "status": "awaiting_packaging"
     }
+}
 }
         },
         "limit": 5,
